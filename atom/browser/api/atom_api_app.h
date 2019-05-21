@@ -213,6 +213,8 @@ class App : public AtomBrowserClient::Delegate,
   void EnableSandbox(mate::Arguments* args);
   void SetUserAgentFallback(const std::string& user_agent);
   std::string GetUserAgentFallback();
+  void SetDisableElectronSiteInstanceOverrides(bool should_disable);
+  bool GetDisableElectronSiteInstanceOverrides();
 
 #if defined(OS_MACOSX)
   bool MoveToApplicationsFolder(mate::Arguments* args);

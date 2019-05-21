@@ -1286,6 +1286,13 @@ std::string App::GetUserAgentFallback() {
   return AtomBrowserClient::Get()->GetUserAgent();
 }
 
+void App::SetDisableElectronSiteInstanceOverrides(bool should_disable) {
+  AtomBrowserClient::Get()->SetDisableProcessRestartTricks(should_disable);
+}
+bool App::GetDisableElectronSiteInstanceOverrides() {
+  return AtomBrowserClient::Get()->ShouldDisableElectronProcessRestartTricks();
+}
+
 #if defined(OS_MACOSX)
 bool App::MoveToApplicationsFolder(mate::Arguments* args) {
   return ui::cocoa::AtomBundleMover::Move(args);
@@ -1467,7 +1474,10 @@ void App::BuildPrototype(v8::Isolate* isolate,
 #endif
       .SetProperty("userAgentFallback", &App::GetUserAgentFallback,
                    &App::SetUserAgentFallback)
-      .SetMethod("enableSandbox", &App::EnableSandbox);
+      .SetMethod("enableSandbox", &App::EnableSandbox)
+      .SetProperty("disableElectronSiteInstanceOverrides",
+                   &App::GetDisableElectronSiteInstanceOverrides,
+                   &App::SetDisableElectronSiteInstanceOverrides);
 }
 
 }  // namespace api

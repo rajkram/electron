@@ -145,9 +145,11 @@ void AtomRendererClient::WillReleaseScriptContext(
   // Destroy the node environment.  We only do this if node support has been
   // enabled for sub-frames to avoid a change-of-behavior / introduce crashes
   // for existing users.
-  // TODO(MarshallOfSOund): Free the environment regardless of this switch
-  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
-          switches::kNodeIntegrationInSubFrames))
+  // We also do this if we have disable electron site instance overrides to
+  // avoid memory leaks
+  auto* command_line = base::CommandLine::ForCurrentProcess();
+  if (command_line->HasSwitch(switches::kNodeIntegrationInSubFrames) ||
+      command_line->HasSwitch(switches::kDisableElectronSiteInstanceOverrides))
     node::FreeEnvironment(env);
 
   // ElectronBindings is tracking node environments.
