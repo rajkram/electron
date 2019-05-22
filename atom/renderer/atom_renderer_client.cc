@@ -104,6 +104,13 @@ void AtomRendererClient::DidCreateScriptContext(
 
   // Setup node environment for each window.
   node::Environment* env = node_bindings_->CreateEnvironment(context);
+  auto* command_line = base::CommandLine::ForCurrentProcess();
+  // If we have disabled the site instance overrides we should prevent loading
+  // any non-context aware native module
+  if (command_line->HasSwitch(switches::kDisableElectronSiteInstanceOverrides))
+    env->ForceOnlyContextAwareNativeModules();
+  env->WarnNonContextAwareNativeModules();
+
   environments_.insert(env);
 
   // Add Electron extended APIs.
