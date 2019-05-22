@@ -1318,4 +1318,4 @@ some point in the future this property will be removed.  This property impacts
 which native modules you can use in the renderer process.  For more information
 on the direction Electron is going with renderer process restarts and usage of
 native modules in the renderer process please check out this
-[Tracking Issue](TODO).
+[Tracking Issue](https://github.com/electron/electron/issues/18397).
