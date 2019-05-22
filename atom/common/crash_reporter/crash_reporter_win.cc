@@ -6,20 +6,25 @@
 
 #include <memory>
 
+#include "base/environment.h"
 #include "base/memory/singleton.h"
 #include "base/path_service.h"
+#include "base/strings/utf_string_conversions.h"
 #include "crashpad/client/crashpad_client.h"
 #include "crashpad/client/crashpad_info.h"
+#if defined(_WIN64)
 #include "gin/public/debug.h"
-
+#endif
 namespace {
 
 int CrashForException(EXCEPTION_POINTERS* info) {
-  crash_reporter::CrashReporterWin::GetInstance()
-      ->GetCrashpadClient()
-      .DumpAndCrash(info);
+  auto* reporter = crash_reporter::CrashReporterWin::GetInstance();
+  if (reporter->IsInitialized())
+    reporter->GetCrashpadClient().DumpAndCrash(info);
   return EXCEPTION_CONTINUE_SEARCH;
 }
+
+const char kPipeNameVar[] = "ELECTRON_CRASHPAD_PIPE_NAME";
 
 }  // namespace
 
@@ -28,6 +33,12 @@ namespace crash_reporter {
 CrashReporterWin::CrashReporterWin() {}
 
 CrashReporterWin::~CrashReporterWin() {}
+
+#if defined(_WIN64)
+void CrashReporterWin::SetUnhandledExceptionFilter() {
+  gin::Debug::SetUnhandledExceptionCallback(&CrashForException);
+}
+#endif
 
 void CrashReporterWin::InitBreakpad(const std::string& product_name,
                                     const std::string& version,
@@ -40,7 +51,7 @@ void CrashReporterWin::InitBreakpad(const std::string& product_name,
   // Only need to initialize once.
   if (simple_string_dictionary_)
     return;
-
+  std::unique_ptr<base::Environment> env(base::Environment::Create());
   if (is_browser_) {
     base::FilePath handler_path;
     base::PathService::Get(base::FILE_EXE, &handler_path);
@@ -52,7 +63,13 @@ void CrashReporterWin::InitBreakpad(const std::string& product_name,
 
     crashpad_client_.StartHandler(handler_path, crashes_dir, crashes_dir,
                                   submit_url, StringMap(), args, true, false);
-    gin::Debug::SetUnhandledExceptionCallback(&CrashForException);
+    env->SetVar(kPipeNameVar,
+                base::UTF16ToUTF8(GetCrashpadClient().GetHandlerIPCPipe()));
+  } else {
+    std::string pipe_name_utf8;
+    if (env->GetVar(kPipeNameVar, &pipe_name_utf8)) {
+      crashpad_client_.SetHandlerIPCPipe(base::UTF8ToUTF16(pipe_name_utf8));
+    }
   }
   crashpad::CrashpadInfo* crashpad_info =
       crashpad::CrashpadInfo::GetCrashpadInfo();

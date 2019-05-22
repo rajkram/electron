@@ -24,6 +24,9 @@ CrashReporter::CrashReporter() {
 
 CrashReporter::~CrashReporter() {}
 
+bool CrashReporter::IsInitialized() {
+  return is_initialized_;
+}
 void CrashReporter::Start(const std::string& product_name,
                           const std::string& company_name,
                           const std::string& submit_url,
@@ -31,6 +34,7 @@ void CrashReporter::Start(const std::string& product_name,
                           bool upload_to_server,
                           bool skip_system_crash_handler,
                           const StringMap& extra_parameters) {
+  is_initialized_ = true;
   SetUploadParameters(extra_parameters);
 
   InitBreakpad(product_name, ATOM_VERSION_STRING, company_name, submit_url,

@@ -21,7 +21,9 @@ namespace crash_reporter {
 class CrashReporterWin : public CrashReporterCrashpad {
  public:
   static CrashReporterWin* GetInstance();
-
+#if defined(_WIN64)
+  static void SetUnhandledExceptionFilter();
+#endif
   crashpad::CrashpadClient& GetCrashpadClient();
   void InitBreakpad(const std::string& product_name,
                     const std::string& version,

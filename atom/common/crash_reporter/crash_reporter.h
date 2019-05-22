@@ -24,6 +24,7 @@ class CrashReporter {
   static CrashReporter* GetInstance();
   static void StartInstance(const mate::Dictionary& options);
 
+  bool IsInitialized();
   void Start(const std::string& product_name,
              const std::string& company_name,
              const std::string& submit_url,
@@ -59,6 +60,7 @@ class CrashReporter {
   bool is_browser_;
 
  private:
+  bool is_initialized_ = false;
   void SetUploadParameters(const StringMap& parameters);
 
   DISALLOW_COPY_AND_ASSIGN(CrashReporter);
