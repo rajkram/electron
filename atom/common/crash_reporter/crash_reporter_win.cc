@@ -10,6 +10,18 @@
 #include "base/path_service.h"
 #include "crashpad/client/crashpad_client.h"
 #include "crashpad/client/crashpad_info.h"
+#include "gin/public/debug.h"
+
+namespace {
+
+int CrashForException(EXCEPTION_POINTERS* info) {
+  crash_reporter::CrashReporterWin::GetInstance()
+      ->GetCrashpadClient()
+      .DumpAndCrash(info);
+  return EXCEPTION_CONTINUE_SEARCH;
+}
+
+}  // namespace
 
 namespace crash_reporter {
 
@@ -37,9 +49,10 @@ void CrashReporterWin::InitBreakpad(const std::string& product_name,
         "--type=crashpad-handler", "--no-rate-limit",
         "--no-upload-gzip",  // not all servers accept gzip
     };
-    crashpad::CrashpadClient crashpad_client;
-    crashpad_client.StartHandler(handler_path, crashes_dir, crashes_dir,
-                                 submit_url, StringMap(), args, true, false);
+
+    crashpad_client_.StartHandler(handler_path, crashes_dir, crashes_dir,
+                                  submit_url, StringMap(), args, true, false);
+    gin::Debug::SetUnhandledExceptionCallback(&CrashForException);
   }
   crashpad::CrashpadInfo* crashpad_info =
       crashpad::CrashpadInfo::GetCrashpadInfo();
@@ -61,6 +74,10 @@ void CrashReporterWin::InitBreakpad(const std::string& product_name,
     database_ = crashpad::CrashReportDatabase::Initialize(crashes_dir);
     SetUploadToServer(upload_to_server);
   }
+}
+
+crashpad::CrashpadClient& CrashReporterWin::GetCrashpadClient() {
+  return crashpad_client_;
 }
 
 // static

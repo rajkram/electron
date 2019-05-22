@@ -9,6 +9,7 @@
 #include <string>
 
 #include "atom/common/crash_reporter/crash_reporter_crashpad.h"
+#include "crashpad/client/crashpad_client.h"
 
 namespace base {
 template <typename T>
@@ -21,6 +22,7 @@ class CrashReporterWin : public CrashReporterCrashpad {
  public:
   static CrashReporterWin* GetInstance();
 
+  crashpad::CrashpadClient& GetCrashpadClient();
   void InitBreakpad(const std::string& product_name,
                     const std::string& version,
                     const std::string& company_name,
@@ -31,7 +33,7 @@ class CrashReporterWin : public CrashReporterCrashpad {
 
  private:
   friend struct base::DefaultSingletonTraits<CrashReporterWin>;
-
+  crashpad::CrashpadClient crashpad_client_;
   CrashReporterWin();
   ~CrashReporterWin() override;
 
