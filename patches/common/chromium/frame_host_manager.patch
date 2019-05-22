@@ -15,7 +15,7 @@ index 2314c6d1d29ebc61d5156644617e9eb088df5d43..05e6f77d047ecfe7430a89f2d6dcbd25
  scoped_refptr<SiteInstance>
  RenderFrameHostManager::GetSiteInstanceForNavigationRequest(
      const NavigationRequest& request) {
-+  BrowserContext* browser_context;
++  BrowserContext* browser_context = nullptr;
 +  scoped_refptr<SiteInstance> candidate_site_instance;
 +  if (!GetContentClient()->browser()->ShouldDisableElectronProcessRestartTricks()) {
 +    browser_context =
