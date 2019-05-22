@@ -1321,7 +1321,7 @@ describe('default behavior', () => {
     })
   })
 
-  describe.only('app.disableElectronSiteInstanceOverrides', () => {
+  describe('app.disableElectronSiteInstanceOverrides', () => {
     it('should default to false', () => {
       expect(app.disableElectronSiteInstanceOverrides).to.equal(false)
     })
