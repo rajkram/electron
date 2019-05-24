@@ -558,7 +558,7 @@ index ce87db97e02af3c4ec358ae688e0f2a96492d952..cacda701a6da00a22a2eaaaaf4d3fad5
    Layer* root_layer_ = nullptr;
  
 diff --git a/ui/compositor/host/host_context_factory_private.cc b/ui/compositor/host/host_context_factory_private.cc
-index 0ff1e05244e0e64bc2456dc3d53dd2378dce1a3c..59dbb24816d98441ff134c96c7bfc98d877a41e6 100644
+index 0ff1e05244e0e64bc2456dc3d53dd2378dce1a3c..7ca7f5e0cb73c8f6560ff9730d3880a07befe663 100644
 --- a/ui/compositor/host/host_context_factory_private.cc
 +++ b/ui/compositor/host/host_context_factory_private.cc
 @@ -99,8 +99,12 @@ void HostContextFactoryPrivate::ConfigureCompositor(
@@ -572,7 +572,7 @@ index 0ff1e05244e0e64bc2456dc3d53dd2378dce1a3c..59dbb24816d98441ff134c96c7bfc98d
 +        compositor);
 +  else
 +    compositor_data.display_client =
-+        std::make_unique<HostDisplayClient>(compositor;
++        std::make_unique<HostDisplayClient>(compositor);
    root_params->display_client =
        compositor_data.display_client->GetBoundPtr(resize_task_runner_)
            .PassInterface();
