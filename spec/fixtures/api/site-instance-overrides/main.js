@@ -6,7 +6,7 @@ process.on('uncaughtException', (e) => {
   process.exit(1)
 })
 
-app.disableElectronSiteInstanceOverrides = JSON.parse(process.argv[2])
+app.allowRendererProcessReuse = JSON.parse(process.argv[2])
 
 const pids = []
 let win

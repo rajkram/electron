@@ -1321,9 +1321,9 @@ describe('default behavior', () => {
     })
   })
 
-  describe('app.disableElectronSiteInstanceOverrides', () => {
+  describe('app.allowRendererProcessReuse', () => {
     it('should default to false', () => {
-      expect(app.disableElectronSiteInstanceOverrides).to.equal(false)
+      expect(app.allowRendererProcessReuse).to.equal(false)
     })
 
     it('should cause renderer processes to get new PIDs when false', async () => {

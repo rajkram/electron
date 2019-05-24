@@ -1307,7 +1307,7 @@ This is the user agent that will be used when no user agent is set at the
 app has the same user agent.  Set to a custom value as early as possible
 in your app's initialization to ensure that your overridden value is used.
 
-### `app.disableElectronSiteInstanceOverrides`
+### `app.allowRendererProcessReuse`
 
 A `Boolean` which when `true` disables the overrides that Electron has in place
 to ensure renderer processes are restarted on every navigation.  The current

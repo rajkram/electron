@@ -1475,7 +1475,7 @@ void App::BuildPrototype(v8::Isolate* isolate,
       .SetProperty("userAgentFallback", &App::GetUserAgentFallback,
                    &App::SetUserAgentFallback)
       .SetMethod("enableSandbox", &App::EnableSandbox)
-      .SetProperty("disableElectronSiteInstanceOverrides",
+      .SetProperty("allowRendererProcessReuse",
                    &App::GetDisableElectronSiteInstanceOverrides,
                    &App::SetDisableElectronSiteInstanceOverrides);
 }
